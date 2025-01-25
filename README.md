@@ -1,2 +1,2 @@
 # stockbetting
-stock market-like betting system with Spring Boot
+Stock market-like betting system with Spring Boot
