@@ -1,5 +1,8 @@
 # stockbetting
-Stock market-like betting system with Spring Boot
+Stock market-like betting system Spring Boot based project
+
+Java 23
+Spring Boot 3.4.2
 
 Features of a Stock Market-Like Betting System:
 
