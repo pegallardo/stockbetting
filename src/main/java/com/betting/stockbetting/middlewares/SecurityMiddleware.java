@@ -22,12 +22,12 @@ public class SecurityMiddleware extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         
-        response.setHeader("X-Content-Type-Options", "nosniff");
-        response.setHeader("X-Frame-Options", "DENY");
-        response.setHeader("X-XSS-Protection", "1; mode=block");
-        response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-        response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-        response.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+        response.setHeader("X-Content-Type-Options", "nosniff"); // Prevents MIME-type sniffing
+        response.setHeader("X-Frame-Options", "DENY"); // Prevents clickjacking
+        response.setHeader("X-XSS-Protection", "1; mode=block"); // XSS protection
+        response.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains"); // HSTS
+        response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin"); // Controls referrer information
+        response.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()"); // Restricts features
         response.setHeader("Cache-Control", "no-store, max-age=0");
         
         filterChain.doFilter(request, response);
