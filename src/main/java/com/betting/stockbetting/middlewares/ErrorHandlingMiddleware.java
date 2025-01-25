@@ -2,6 +2,7 @@
 package com.betting.stockbetting.middlewares;
 
 import com.betting.stockbetting.exceptions.StockNotFoundException;
+import com.betting.stockbetting.exceptions.ValidationException;
 import com.betting.stockbetting.models.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
