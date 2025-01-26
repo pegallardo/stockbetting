@@ -1,6 +1,5 @@
 package com.stockbetting.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +16,15 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/stocks")
-@RequiredArgsConstructor  // Lombok annotation to automatically generate a constructor with required fields (stockService and mlService)
 public class StockController {
 
     private final StockService stockService; // Service for managing stock data operations (retrieving and saving stock data)
     private final MLService mlService; // Service for machine learning predictions related to stock trends
+
+    public StockController(StockService stockService, MLService mlService) {
+        this.stockService = stockService;
+        this.mlService = mlService;
+    }
 
     /**
      * Endpoint to retrieve all stock data for a given stock symbol.

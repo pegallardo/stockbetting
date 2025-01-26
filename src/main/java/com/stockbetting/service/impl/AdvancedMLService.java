@@ -1,6 +1,5 @@
 package com.stockbetting.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.ml.Pipeline;
 import org.apache.spark.ml.PipelineStage;
 import org.apache.spark.ml.classification.LogisticRegression;
@@ -15,6 +14,8 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.stockbetting.dto.response.PredictionResponse;
 import com.stockbetting.service.MLService;
@@ -27,7 +28,6 @@ import java.util.List;
  * This service trains a Logistic Regression model with hyperparameter tuning and performs cross-validation
  * for better accuracy.
  */
-@Slf4j
 @Service
 public class AdvancedMLService implements MLService {
     private static final String MODEL_PATH = "models/stock_prediction_model"; // Path to save/load the trained model
@@ -40,6 +40,8 @@ public class AdvancedMLService implements MLService {
 
     private final SparkSession spark; // Spark session for processing data
     private CrossValidatorModel trainedModel; // The trained model (cross-validated)
+
+    private static final Logger logger = LoggerFactory.getLogger(AdvancedMLService.class);
 
     /**
      * Initializes the service, setting up Spark session and loading/training the model.
@@ -77,7 +79,7 @@ public class AdvancedMLService implements MLService {
             return CrossValidatorModel.load(MODEL_PATH);
         } catch (Exception e) {
             // If the model doesn't exist, train a new one
-            log.info("Model not found, training new model");
+            logger.info("Model not found, training new model");
             return trainNewModel();
         }
     }
@@ -203,7 +205,7 @@ public class AdvancedMLService implements MLService {
         var evaluator = new BinaryClassificationEvaluator().setLabelCol(LABEL_COLUMN); // Create evaluator for binary classification
         var accuracy = evaluator.evaluate(predictions); // Calculate accuracy
         
-        log.info("Model Accuracy: {:.2f}%", accuracy * 100); // Log model accuracy
+        logger.info("Model Accuracy: {:.2f}%", accuracy * 100); // Log model accuracy
     }
 
     /**

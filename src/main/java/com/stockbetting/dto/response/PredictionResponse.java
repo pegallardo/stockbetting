@@ -1,8 +1,5 @@
 package com.stockbetting.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 /**
  * Represents a detailed stock prediction response.
  * 
@@ -12,11 +9,48 @@ import lombok.Data;
  * @param recommendation Trading recommendation based on prediction
  */
 
-@Data
-@AllArgsConstructor
-public class PredictionResponse {
-    private String symbol;
-    private String date;
-    private double predictedOdds;
-    private String message;
+ public class PredictionResponse {
+    private String direction;
+    private String recommendation;
+    private double confidence;
+    private String explanation;
+
+    public PredictionResponse(String direction, String recommendation, double confidence, String explanation) {
+        this.direction = direction;
+        this.recommendation = recommendation;
+        this.confidence = confidence;
+        this.explanation = explanation;
+    }
+
+    public String getDirection() {
+        return direction;
+    }
+
+    public void setDirection(String direction) {
+        this.direction = direction;
+    }
+
+    public String getRecommendation() {
+        return recommendation;
+    }
+
+    public void setRecommendation(String recommendation) {
+        this.recommendation = recommendation;
+    }
+
+    public double getConfidence() {
+        return confidence;
+    }
+
+    public void setConfidence(double confidence) {
+        this.confidence = confidence;
+    }
+
+    public String getExplanation() {
+        return explanation;
+    }
+
+    public void setExplanation(String explanation) {
+        this.explanation = explanation;
+    }
 }

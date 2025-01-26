@@ -1,9 +1,6 @@
 package com.stockbetting.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Entity representing stock market data for a specific stock symbol.
@@ -11,9 +8,6 @@ import lombok.NoArgsConstructor;
  */
 @Entity
 @Table(name = "stock_data")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class StockData {
 
     /**
@@ -72,4 +66,11 @@ public class StockData {
      */
     @Column(nullable = false, length = 10) // Enforcing the date format length.
     private String date;
+
+    public String getSymbol() { return symbol; }
+    public double getOpen() { return open; }
+    public double getHigh() { return high; }
+    public double getLow() { return low; }
+    public double getClose() { return close; }
+    public long getVolume() { return volume; }
 }

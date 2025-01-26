@@ -1,13 +1,9 @@
 package com.stockbetting.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
-@Data
-@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +15,22 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    public User() {}
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
