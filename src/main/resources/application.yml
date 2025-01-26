@@ -30,7 +30,7 @@ spring:
       database: 0                                      # Redis database index
 
 # JWT Security Configuration
-app:
+jwt:
   jwt-secret: ${JWT_SECRET:your-default-secret-key}    # JWT signing key with environment variable override
   jwt-expiration-ms: ${JWT_EXPIRATION:86400000}        # Token validity (24 hours in milliseconds)
 
