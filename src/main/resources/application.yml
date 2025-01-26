@@ -1,7 +1,49 @@
+# Core Application Configuration
 spring:
+  application:
+    name: stockbetting  # Service identifier for monitoring and service discovery
+  
+  # PostgreSQL Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/stockbetting  # Database connection URL
+    username: postgres                                  # Database user
+    password: Z8s5x2,;                                 # Database password
+    driver-class-name: org.postgresql.Driver           # PostgreSQL JDBC driver
+  
+  # JPA/Hibernate Configuration
+  jpa:
+    open-in-view: false                                # Optimizes performance by closing DB connections early
+    hibernate:
+      ddl-auto: update                                 # Automatically updates DB schema based on entities
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect  # PostgreSQL-specific SQL optimizations
+        format_sql: true                                  # Pretty prints SQL in logs
+    show-sql: true                                       # Displays executed SQL statements
+
+  # Redis Cache Configuration
   data:
     redis:
-        host: localhost
-        port: 6379
-        timeout: 2000
-        database: 0
+      host: localhost                                  # Redis server host
+      port: 6379                                       # Redis server port
+      timeout: 2000                                    # Connection timeout in milliseconds
+      database: 0                                      # Redis database index
+
+# JWT Security Configuration
+app:
+  jwt-secret: ${JWT_SECRET:your-default-secret-key}    # JWT signing key with environment variable override
+  jwt-expiration-ms: ${JWT_EXPIRATION:86400000}        # Token validity (24 hours in milliseconds)
+
+# Logging Configuration
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG                                # Security framework logging
+      hibernate:
+        SQL: DEBUG                                     # SQL query logging
+        type:
+          descriptor:
+            sql: trace                                 # SQL parameter logging
+    com:
+      stockbetting: DEBUG                              # Application-specific logging
