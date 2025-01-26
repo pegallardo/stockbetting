@@ -1,23 +1,28 @@
 package com.stockbetting.service;
 
 import java.util.List;
-
+import java.util.concurrent.CompletableFuture;
 import com.stockbetting.domain.entity.StockData;
 
+/**
+ * Service interface for managing stock data operations.
+ * Provides methods for retrieving and saving stock data asynchronously.
+ */
 public interface StockService {
+    
     /**
-     * Fetch stock data by symbol.
+     * Retrieves stock data for a given symbol asynchronously.
      *
-     * @param symbol Stock symbol.
-     * @return List of stock data.
+     * @param symbol The stock symbol to retrieve data for
+     * @return CompletableFuture of a list of StockData for the specified symbol
      */
-    List<StockData> getStockData(String symbol);
+    CompletableFuture<List<StockData>> getStockDataAsync(String symbol);
 
     /**
-     * Save stock data to the database.
+     * Saves new stock data asynchronously.
      *
-     * @param stockData Stock data to save.
-     * @return Saved stock data.
+     * @param stockData The stock data to save
+     * @return CompletableFuture of the saved StockData
      */
-    StockData saveStockData(StockData stockData);
+    CompletableFuture<StockData> saveStockDataAsync(StockData stockData);
 }

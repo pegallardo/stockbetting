@@ -1,5 +1,7 @@
 package com.stockbetting.service;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.stockbetting.dto.response.PredictionResponse;
 
 public interface MLService {
@@ -14,5 +16,6 @@ public interface MLService {
      * @param volume    Volume of stocks traded.
      * @return Prediction response with trend and odds.
      */
-    PredictionResponse predict(String symbol, double open, double high, double low, double close, long volume);
+    CompletableFuture<PredictionResponse> predict(String symbol, double open, double high, 
+                                                double low, double close, long volume);
 }
