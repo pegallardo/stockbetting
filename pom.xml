@@ -8,11 +8,11 @@
 		<version>3.4.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.betting</groupId>
+	<groupId>com.morpheus</groupId>
 	<artifactId>stockbetting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>stockbetting</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Stock market-like betting demo project</description>
 	<url/>
 	<licenses>
 		<license/>
