@@ -1,4 +1,3 @@
-
 package com.morpheus.stockbetting.middleware;
 
 import jakarta.servlet.FilterChain;
@@ -7,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -17,10 +18,8 @@ import com.morpheus.stockbetting.util.HeadersUtil;
 import java.io.IOException;
 import java.util.UUID;
 
-/**
- * Middleware for request/response logging and tracking
- */
 @Component
+@Order(2)
 public class RequestLoggingMiddleware extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(RequestLoggingMiddleware.class);
 
@@ -29,26 +28,30 @@ public class RequestLoggingMiddleware extends OncePerRequestFilter {
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        
+
         String requestId = UUID.randomUUID().toString();
+        MDC.put("requestId", requestId);
         long startTime = System.currentTimeMillis();
 
+        // Wrap the request and response to capture their content
         ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
-        // Add tracking headers
+        // Add tracking header to response
         response.setHeader("X-Request-ID", requestId);
-        
+
         try {
-            logRequest(requestWrapper, requestId);
+            logIncomingRequest(requestWrapper, requestId);
             filterChain.doFilter(requestWrapper, responseWrapper);
+            logOutgoingResponse(responseWrapper, requestId, System.currentTimeMillis() - startTime);
         } finally {
-            logResponse(responseWrapper, requestId, System.currentTimeMillis() - startTime);
+            // Ensure response body is copied to the original response
             responseWrapper.copyBodyToResponse();
+            MDC.clear(); // Clear MDC to avoid memory leaks
         }
     }
 
-    private void logRequest(ContentCachingRequestWrapper request, String requestId) {
+    private void logIncomingRequest(ContentCachingRequestWrapper request, String requestId) {
         logger.info("""
             Incoming Request:
             ID: {}
@@ -63,7 +66,7 @@ public class RequestLoggingMiddleware extends OncePerRequestFilter {
         );
     }
 
-    private void logResponse(ContentCachingResponseWrapper response, String requestId, long duration) {
+    private void logOutgoingResponse(ContentCachingResponseWrapper response, String requestId, long duration) {
         logger.info("""
             Outgoing Response:
             ID: {}

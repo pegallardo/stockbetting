@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.morpheus.stockbetting.security.JwtAuthenticationFilter;
+import com.morpheus.stockbetting.security.HttpMethodValidationFilter;
 
 /**
  * Security configuration using the latest Spring Security features
@@ -37,11 +38,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .csrf(csrf -> csrf.disable())
             .headers(headers -> headers
-            .httpStrictTransportSecurity(hsts -> hsts
-                .includeSubDomains(true)
-                .preload(true)
-                .maxAgeInSeconds(31536000)
-            ))
+                .httpStrictTransportSecurity(hsts -> hsts
+                    .includeSubDomains(true)
+                    .preload(true)
+                    .maxAgeInSeconds(31536000)
+                ))
             .sessionManagement(session -> 
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
@@ -49,6 +50,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/bets/**").authenticated()
                 .requestMatchers("/actuator/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
+            // Add the HTTP method validation filter before JWT authentication filter
+            .addFilterBefore(new HttpMethodValidationFilter(), UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
@@ -57,7 +60,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
             "Authorization",
             "Content-Type",
@@ -83,4 +86,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
+
 }

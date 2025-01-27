@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.morpheus.stockbetting.dto.response.PredictionResponse;
 
@@ -16,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Unit tests for DefaultMLService implementation using BDD style testing
  */
-@ExtendWith(MockitoExtension.class)
+
 @DisplayName("DefaultMLService Behavior")
 public class DefaultMLServiceTest {
 

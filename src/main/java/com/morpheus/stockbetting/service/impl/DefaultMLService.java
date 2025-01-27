@@ -52,6 +52,14 @@ public class DefaultMLService implements MLService {
      */
     @Override
     public CompletableFuture<PredictionResponse> predict(String symbol, double open, double high, double low, double close, long volume) {
+        
+        if (symbol == null) {
+            throw new IllegalArgumentException("Symbol cannot be null");
+        }
+        if (volume < 0) {
+            throw new IllegalArgumentException("Volume cannot be negative");
+        }
+
         return CompletableFuture.supplyAsync(() -> {
             // Create the feature vector from the input data
             double[] features = {open, high, low, close, volume};

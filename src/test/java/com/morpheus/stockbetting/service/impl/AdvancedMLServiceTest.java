@@ -1,24 +1,38 @@
 package com.morpheus.stockbetting.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
+import org.apache.spark.ml.tuning.CrossValidatorModel;
+import org.apache.spark.sql.DataFrameReader;
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.Mock;
+
 
 import com.morpheus.stockbetting.dto.response.PredictionResponse;
 
 import java.util.concurrent.CompletableFuture;
 
-@ExtendWith(MockitoExtension.class)
 @DisplayName("AdvancedMLService Tests")
 class AdvancedMLServiceTest {
+
+    @Mock
+    private SparkSession sparkSession;
+
+    @Mock
+    private CrossValidatorModel trainedModel;
 
     @InjectMocks
     private AdvancedMLService mlService;
@@ -35,8 +49,35 @@ class AdvancedMLServiceTest {
     }
 
     @BeforeEach
-    void initializeMarketData() {
+    void setUp() {
         marketData = new MarketTestData();
+        
+        // Mocking DataFrameReader and Dataset<Row>
+        DataFrameReader mockDataFrameReader = mock(DataFrameReader.class);
+        Dataset<Row> mockDataset = mock(Dataset.class);
+        
+        // Mocking behavior for SparkSession
+        when(sparkSession.read()).thenReturn(mockDataFrameReader);
+        
+        // Mocking behavior for DataFrameReader to return a Dataset<Row>
+        when(mockDataFrameReader.format(anyString())).thenReturn(mockDataFrameReader);
+        when(mockDataFrameReader.load()).thenReturn(mockDataset);
+        
+        // Mocking the trained model's transform method to return a Dataset<Row>
+        when(trainedModel.transform(any(Dataset.class))).thenReturn(mockDataset);
+        
+        // Creating a PredictionResponse with the constructor
+        PredictionResponse mockResponse = new PredictionResponse("UP", "BUY", 0.9, "Strong upward movement detected.");
+        
+        // Mocking CompletableFuture to return a predefined PredictionResponse
+        when(mlService.predict(
+            marketData.symbol,
+            marketData.open,
+            marketData.high,
+            marketData.low,
+            marketData.close,
+            marketData.volume))
+            .thenReturn(CompletableFuture.completedFuture(mockResponse));
     }
 
     @Nested
