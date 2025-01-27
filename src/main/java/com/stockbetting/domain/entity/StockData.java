@@ -73,4 +73,11 @@ public class StockData {
     public double getLow() { return low; }
     public double getClose() { return close; }
     public long getVolume() { return volume; }
+
+    public void setSymbol(String symbol) { this.symbol = symbol; }
+    public void setOpen(double open) { this.open = open; }
+    public void setHigh(double high) { this.high = high; }
+    public void setLow(double low) { this.low = low; }
+    public void setClose(double close) { this.close = close; }
+    public void setVolume(long volume) { this.volume = volume; }
 }
