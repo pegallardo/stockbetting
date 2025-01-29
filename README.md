@@ -13,8 +13,11 @@ Features of a Stock Market-Like Betting System:
 Dataset Example (stock_data.csv):
 
 Open	High	Low	Close	Volume	Label
+
 100.5	105.2	99.3	104.7	1500000	1
+
 104.7	106.1	103.4	105.8	1200000	1
+
 105.8	106.0	100.7	101.3	1800000	0
 
 Features: Open, High, Low, Close, Volume.
